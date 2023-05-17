@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Switch, Route } from "react-router-dom";
+import React, { useContext } from 'react';
+import { Routes, Route } from "react-router-dom";
 import NavBar from './NavBar';
 import Login from "./Login";
 import GamesList from './GamesList';
 import NewGame from './NewGame';
+import { UserContext } from "./context/UserContext";
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    fetch("/me").then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      }
-    });
-  }, []);
+  const {user, setUser}  = useContext(UserContext);
 
   if (!user) return <Login onLogin={setUser} />;
 
@@ -22,12 +15,12 @@ function App() {
     <>
       <NavBar user={user} setUser={setUser} />
       <main>
-        <Switch>
+        <Routes>
           <Route path="/">
             <NewGame />
             <GamesList />
           </Route>
-        </Switch>
+        </Routes>
       </main>
     </>
   );
